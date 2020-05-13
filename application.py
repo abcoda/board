@@ -8,15 +8,16 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-# votes = {"yes": 0, "no": 0, "maybe": 0}
-# svg = ''
+board = []
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
 @socketio.on("change made")
-def vote(data):
-    # print(data)
-    emit("refresh board", data['svg'], broadcast=True)
+def refresh(data):
+    # board.append(data['change'])
+    print("--- Begin ---")
+    print(data['change'])
+    print("--- End ---")
+    emit("refresh board", data['change'], broadcast=True)
