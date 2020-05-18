@@ -18,12 +18,12 @@ def refresh(data):
     # board_data.append(data['change'])
 
     # print("--- Begin ---")
-    # print(data['clear'])
+    # print(data['change'])
     # print("--- End ---")
     if data['change']:
         # print(board_data)
         # board_data.append(data['change'])
-        emit("refresh board", {"change":data['change']}, broadcast=True)
+        emit("refresh board", data['change'], broadcast=True)
     elif data['clear']:
         # board_data = []
         emit("clear board", broadcast=True)

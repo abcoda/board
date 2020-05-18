@@ -10,17 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let lines = [];
     let svg = null;
 
-    function updateServer(change,clear=false){
-      // alert('sending change')
-      // socket.emit('change made', {'svg': document.querySelector('#board').innerHTML});
+    function updateServer(change,clear = false){
       socket.emit('change made', {'change':change,'clear':clear});
     }
 
-    socket.on('refresh board', data => {
-      document.querySelector('#board').innerHTML += data.change
+    socket.on('refresh board', change => {
+      console.log(change)
+      // for (let i = 0; i < board.length; i++) {
+      //   svg.append(board[i])
+      // }
+      document.querySelector('#board').innerHTML += change
     });
 
-    socket.on('clear board', data => {
+    socket.on('clear board', () => {
+      console.log('clear')
+      // for (let i = 0; i < board.length; i++) {
+      //   svg.append(board[i])
+      // }
       document.querySelector('#board').innerHTML = ''
     });
 
@@ -57,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             points = [];
             lines = [];
             document.querySelector("#board").innerHTML = ''
-            updateServer(null,true)
+            updateServer(null, true)
         }
 
     }
@@ -78,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             .style('stroke', color);
             lines.push(line);
             updateServer(line['_groups'][0][0].outerHTML)
+            // updateServer(line._groups[0][0])
         }
 
         const point = svg.append('circle')
@@ -86,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
                          .attr('r', thickness)
                          .style('fill', color);
         points.push(point);
+        // console.log(point)
+        // console.log((point['_groups'][0][0].outerHTML))
         updateServer(point['_groups'][0][0].outerHTML)
     }
 
