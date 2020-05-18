@@ -43,12 +43,29 @@ document.addEventListener('DOMContentLoaded', () => {
             draw_point(coords[0], coords[1], false);
         });
 
+        svg.on('touchstart', function() {
+            draw = true;
+            const coords = d3.mouse(this);
+            draw_point(coords[0], coords[1], false);
+        });
+
         svg.on('mouseup', () =>{
             draw = false;
             // updateServer()
         });
 
+        svg.on('touchend', () => {
+          draw = false;
+        })
+
         svg.on('mousemove', function() {
+            if (!draw)
+                return;
+            const coords = d3.mouse(this);
+            draw_point(coords[0], coords[1], true);
+        });
+
+        svg.on('touchmove', function() {
             if (!draw)
                 return;
             const coords = d3.mouse(this);
