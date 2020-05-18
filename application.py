@@ -7,8 +7,7 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
-
-board = []
+# global board_data
 
 @app.route("/")
 def index():
@@ -16,8 +15,15 @@ def index():
 
 @socketio.on("change made")
 def refresh(data):
-    # board.append(data['change'])
-    print("--- Begin ---")
-    print(data['change'])
-    print("--- End ---")
-    emit("refresh board", data['change'], broadcast=True)
+    # board_data.append(data['change'])
+
+    # print("--- Begin ---")
+    # print(data['clear'])
+    # print("--- End ---")
+    if data['change']:
+        # print(board_data)
+        # board_data.append(data['change'])
+        emit("refresh board", {"change":data['change']}, broadcast=True)
+    elif data['clear']:
+        # board_data = []
+        emit("clear board", broadcast=True)

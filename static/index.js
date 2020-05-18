@@ -10,26 +10,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let lines = [];
     let svg = null;
 
-    function updateServer(change){
+    function updateServer(change,clear=false){
       // alert('sending change')
       // socket.emit('change made', {'svg': document.querySelector('#board').innerHTML});
-      socket.emit('change made', {'change':change});
+      socket.emit('change made', {'change':change,'clear':clear});
     }
 
-    socket.on('refresh board', change => {
-      // console.log(change)
-      // for (let i = 0; i < board.length; i++) {
-      //   svg.append(board[i])
-      // }
-      document.querySelector('#board').innerHTML += change
+    socket.on('refresh board', data => {
+      document.querySelector('#board').innerHTML += data.change
+    });
+
+    socket.on('clear board', data => {
+      document.querySelector('#board').innerHTML = ''
     });
 
     function render() {
 
         // create the selection area
         svg = d3.select('#board')
-                .attr('height', window.innerHeight)
-                .attr('width', window.innerWidth);
+                // .attr('height', window.innerHeight)
+                // .attr('width', window.innerWidth);
 
         svg.on('mousedown', function() {
             draw = true;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             points = [];
             lines = [];
             document.querySelector("#board").innerHTML = ''
-            // updateServer()
+            updateServer(null,true)
         }
 
     }
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             .style('stroke', color);
             lines.push(line);
             updateServer(line['_groups'][0][0].outerHTML)
-            // updateServer(line._groups[0][0])
         }
 
         const point = svg.append('circle')
@@ -87,8 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
                          .attr('r', thickness)
                          .style('fill', color);
         points.push(point);
-        // console.log(point)
-        // console.log((point['_groups'][0][0].outerHTML))
         updateServer(point['_groups'][0][0].outerHTML)
     }
 
