@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-    // state
+    // draw state
     let draw = false;
 
     // elements
